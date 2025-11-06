@@ -7,7 +7,7 @@ dotenv.config()
 const providerUrl = process.env.PROVIDER_URL || "http://localhost:8545";
 const provider = new ethers.JsonRpcProvider(providerUrl);
 
-const callerContractAddress = `0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0`
+const callerContractAddress = `0x5FC8d32690cc91D4c39d9d3abcBD16989F875707`
 
 const hardhatPrivateKey = `0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80`
 
@@ -36,6 +36,25 @@ async function callWrongFunction() {
   }
 }
 
+async function getPopulation() {
+  try {
+    const population = await callerContract.getPopulation();
+    console.log("Population:", population.toString());
+  } catch (error) {
+    console.error("Error getting population:", error)
+  }
+}
+
+async function delegateCallIncrement() {
+  try {
+    await callerContract.delegateCallIncrement();
+    console.log("Increment called successfully");
+  } catch (error) {
+    console.error("Error calling increment:", error)
+  }
+}
 
 // callIncrement()
-callWrongFunction()
+// callWrongFunction()
+getPopulation()
+// delegateCallIncrement()
