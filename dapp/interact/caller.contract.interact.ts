@@ -27,4 +27,15 @@ async function callIncrement() {
 }
 
 
-callIncrement()
+async function callWrongFunction() {
+  try {
+    await callerContract.callWrongFunction();
+    console.log("Expecting successful response");
+  } catch (error) {
+    console.log("Error calling wrong function:", error)
+  }
+}
+
+
+// callIncrement()
+callWrongFunction()
