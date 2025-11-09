@@ -1,5 +1,18 @@
 export const implementationAbi = [
     {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "population",
+          "type": "uint256"
+        }
+      ],
+      "name": "Population",
+      "type": "event"
+    },
+    {
       "inputs": [],
       "name": "getPopulation",
       "outputs": [

@@ -17,7 +17,7 @@ const getPopulationCallData = iFace.encodeFunctionData("getPopulation");
 const providerUrl = process.env.PROVIDER_URL || "http://localhost:8545";
 const provider = new ethers.JsonRpcProvider(providerUrl);
 
-const proxyContractAddress = `0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9`
+const proxyContractAddress = `0xa513E6E4b8f2a923D98304ec87F64353C4D5C853`
 
 const hardhatPrivateKey = `0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80`
 
@@ -52,18 +52,16 @@ async function getPopulation() {
   }
 
   try {
-    // sending transaction to non-existing function will redirects to the fallback function
-    const transactionResponse = await wallet.sendTransaction(tx);
-    console.log("Transaction hash:", transactionResponse.hash);
-
-    const result = await transactionResponse.wait();
-    const response = result
-    console.log("Population:", response);
+    //  using "provider.call" is best for interacting with view/pure functions which doesn't send a transaction
+    const result = await provider.call(tx);
+    // decoding ABI encoded result 
+    const decodedResult = iFace.decodeFunctionResult("getPopulation", result);
+    console.log("Population:", decodedResult[0].toString());
   } catch (error) {
     console.error("Error getting population:", error)
   }
 }
 
 
-// incrementPopulation()
-getPopulation()
+incrementPopulation()
+// getPopulation()
