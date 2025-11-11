@@ -4,7 +4,21 @@ pragma solidity 0.8.30;
 
 contract Proxy{
   uint256 population;
-  address implementationAddress = 0x0165878A594ca255338adfa4d48449f69242Eb8F;
+  address implementationAddress;
+  address owner;
+
+  constructor(address _owner){
+    owner = _owner;
+  }
+
+  modifier onlyOwner(){
+    require(owner == msg.sender, "Not contract owner");
+    _;
+  }
+
+  function setImplementation(address _implementationAddress) public onlyOwner{
+    implementationAddress = _implementationAddress;
+  }
 
   fallback(bytes calldata data) external returns(bytes memory){
     (bool success, bytes memory result) = implementationAddress.delegatecall(data);

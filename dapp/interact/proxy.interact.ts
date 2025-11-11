@@ -17,7 +17,19 @@ const getPopulationCallData = iFace.encodeFunctionData("getPopulation");
 const providerUrl = process.env.PROVIDER_URL || "http://localhost:8545";
 const provider = new ethers.JsonRpcProvider(providerUrl);
 
-const proxyContractAddress = `0xa513E6E4b8f2a923D98304ec87F64353C4D5C853`
+// const proxyContractAddress = `0x0DCd1Bf9A1b36cE34237eEaFef220932846BCD82`
+const proxyContractAddress = process.env.PROXY
+const implementationAddress = process.env.IMPLEMENTATION
+
+if (!proxyContractAddress) {
+  console.error("Error: PROXY environment variable not set. Please check your .env file.");
+  process.exit(1);
+}
+
+if (!implementationAddress) {
+  console.error("Error: IMPLEMENTATION  environment variable not set. Please check your .env file.");
+  process.exit(1);
+}
 
 const hardhatPrivateKey = `0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80`
 
@@ -25,6 +37,12 @@ const eoAddressPrivateKey = process.env.WALLET_PRIVATE_KEY || hardhatPrivateKey;
 const wallet = new ethers.Wallet(eoAddressPrivateKey, provider);
 
 const proxyContract = new ethers.Contract(proxyContractAddress, proxyAbi, wallet);
+
+async function setImplementation(implAddr: string) {
+  const tx = await proxyContract.setImplementation(implAddr);
+  await tx.wait();
+  console.log("Implementation set successfully")
+}
 
 async function incrementPopulation() {
   const tx = {
@@ -63,5 +81,6 @@ async function getPopulation() {
 }
 
 
-incrementPopulation()
-// getPopulation()
+// incrementPopulation()
+getPopulation()
+// setImplementation(implementationAddress)

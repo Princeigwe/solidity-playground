@@ -4,9 +4,11 @@ async function main() {
   const [deployer] = await hre.ethers.getSigners();
   console.log("Deploying contracts with the account:", deployer.address);
 
-  const Proxy = await hre.ethers.deployContract("Proxy");
+  // deploying contract with address as the constructor value
+  const Proxy = await hre.ethers.getContractFactory("Proxy");
+  const proxy = await Proxy.deploy(deployer.address);
 
-  const proxyContract = await Proxy.waitForDeployment()
+  const proxyContract = await proxy.waitForDeployment()
   console.log("Proxy deployed to:", await proxyContract.getAddress());
 }
 
